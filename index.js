@@ -1,4 +1,4 @@
-import axios from "axios";
+/*import axios from "axios";
 
 import { config } from "dotenv";
 import mailchimp from "@mailchimp/mailchimp_marketing";
@@ -96,3 +96,4 @@ async function main() {
 }
 
 main();
+*/
