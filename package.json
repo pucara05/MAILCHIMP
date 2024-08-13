@@ -1,0 +1,26 @@
+{
+  "name": "mailchimp",
+  "version": "1.0.0",
+  "description": "learn mailchimp",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pucara05/MAILCHIMP.git"
+  },
+  "author": "pucara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pucara05/MAILCHIMP/issues"
+  },
+  "homepage": "https://github.com/pucara05/MAILCHIMP#readme",
+  "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
+    "axios": "^1.7.3",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.4"
+  }
+}
