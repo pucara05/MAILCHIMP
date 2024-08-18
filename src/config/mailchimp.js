@@ -46,6 +46,30 @@ export const getLists = async () => {
   }
 };
 
+// Función para obtener información detallada de las plantillas de Mailchimp
+export const getTemplates = async () => {
+  try {
+    const response = await mailchimpApi.get('/templates');
+    checkServerResponse(response); // Verifica la respuesta del servidor
+    checkDataIntegrity(response.data); // Verifica la integridad de los datos
+
+    // Extrae la información detallada de las plantillas
+    const templatesInfo = response.data.templates.map(template => ({
+      id: template.id,
+      name: template.name,
+      date_created: template.date_created
+    }));
+
+    return templatesInfo;
+  } catch (error) {
+    console.error('Error fetching templates:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+
+
+
 export default mailchimpApi;
 
 
