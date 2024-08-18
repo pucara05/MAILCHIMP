@@ -1,46 +1,28 @@
-// routes/campaignRoutes.js
 import express from 'express';
-import { fetchLists, createCampaign, sendCampaign, getCampaignDetails } from '../controllers/mailchimpController.js';
-
+import { createCampaign, sendCampaign, getMailchimpLists } from '../controllers/campaignController.js';
 
 const router = express.Router();
 
 /**
- * @openapi
+ * @swagger
  * /api/lists:
  *   get:
- *     summary: Obtener todas las listas de Mailchimp
- *     description: Obtiene la información de todas las listas (audiences) de Mailchimp.
+ *     summary: Get Mailchimp lists
+ *     description: Retrieve all Mailchimp lists available in your account.
  *     responses:
  *       200:
- *         description: Lista de listas de Mailchimp
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 lists:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                         description: ID de la lista
- *                       name:
- *                         type: string
- *                         description: Nombre de la lista
+ *         description: Lists retrieved successfully.
  *       500:
- *         description: Error al obtener las listas
+ *         description: Failed to fetch lists.
  */
-router.get('/lists', fetchLists);
+router.get('/lists', getMailchimpLists);
 
 /**
- * @openapi
- * /api/campaigns:
+ * @swagger
+ * /api/create-campaign:
  *   post:
- *     summary: Crear una nueva campaña
- *     description: Crea una nueva campaña en Mailchimp.
+ *     summary: Create a Mailchimp campaign
+ *     description: Create a new campaign in Mailchimp.
  *     requestBody:
  *       required: true
  *       content:
@@ -50,22 +32,22 @@ router.get('/lists', fetchLists);
  *             properties:
  *               list_id:
  *                 type: string
- *                 description: ID de la lista de Mailchimp
- *               subject_line:
+ *                 description: The ID of the list to send the campaign to.
+ *               subject:
  *                 type: string
- *                 description: Línea de asunto de la campaña
- *               title:
- *                 type: string
- *                 description: Título de la campaña
+ *                 description: The subject line for the campaign.
  *               from_name:
  *                 type: string
- *                 description: Nombre del remitente
+ *                 description: The name to show in the "From" field.
  *               reply_to:
  *                 type: string
- *                 description: Correo de respuesta
+ *                 description: The reply-to email address.
+ *               html_content:
+ *                 type: string
+ *                 description: The HTML content of the campaign email.
  *     responses:
- *       200:
- *         description: Campaña creada exitosamente
+ *       201:
+ *         description: Campaign created and content added successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -73,65 +55,39 @@ router.get('/lists', fetchLists);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: 'Campaign created successfully'
- *                 data:
- *                   type: object
+ *                   example: Campaign created and content added
+ *                 campaignId:
+ *                   type: string
+ *                   example: e5f1d9e3b1
  *       500:
- *         description: Error al crear la campaña
+ *         description: Failed to create campaign.
  */
-router.post('/campaigns', createCampaign);
+router.post('/create-campaign', createCampaign);
 
 
-// routes/campaignRoutes.js
+
 /**
- * @openapi
- * /api/campaigns/{campaign_id}/send:
+ * @swagger
+ * /api/send-campaign:
  *   post:
- *     summary: Enviar una campaña
- *     description: Envía una campaña previamente creada.
- *     parameters:
- *       - in: path
- *         name: campaign_id
- *         required: true
- *         description: ID de la campaña
- *         schema:
- *           type: string
+ *     summary: Send a Mailchimp campaign
+ *     description: Send an existing Mailchimp campaign.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               campaign_id:
+ *                 type: string
+ *                 description: The ID of the campaign to send.
  *     responses:
  *       200:
- *         description: Campaña enviada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
+ *         description: Campaign sent successfully.
  *       500:
- *         description: Error al enviar la campaña
+ *         description: Failed to send campaign.
  */
-router.post('/campaigns/:campaign_id/send', sendCampaign);
-
-
-/**
- * @openapi
- * /api/campaigns/{campaign_id}:
- *   get:
- *     summary: Obtener detalles de una campaña
- *     description: Obtiene los detalles de una campaña en Mailchimp.
- *     parameters:
- *       - in: path
- *         name: campaign_id
- *         required: true
- *         description: ID de la campaña
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Detalles de la campaña
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *       500:
- *         description: Error al obtener los detalles de la campaña
- */
-router.get('/campaigns/:campaign_id', getCampaignDetails);
+router.post('/send-campaign', sendCampaign);
 
 export default router;
