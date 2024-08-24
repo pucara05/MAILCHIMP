@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import Sequelize from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import { fileURLToPath } from 'url';
 import config from '../config/database.js';
 
@@ -11,9 +11,11 @@ const __dirname = path.dirname(__filename);
 const basename = path.basename(__filename);
 const db = {};
 
+// Determinar el entorno de ejecución
 const env = process.env.NODE_ENV || 'development';
 const sequelizeConfig = config[env];
 
+// Crear instancia de Sequelize
 const sequelize = new Sequelize(
   sequelizeConfig.database,
   sequelizeConfig.username,
@@ -21,6 +23,7 @@ const sequelize = new Sequelize(
   sequelizeConfig
 );
 
+// Leer archivos de modelos y cargarlos
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -31,17 +34,19 @@ fs
       file.indexOf('.test.js') === -1
     );
   })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
+  .forEach(async (file) => {
+    const model = (await import(path.join(__dirname, file))).default;
+    db[model.name] = model(sequelize, DataTypes);
   });
 
+// Configurar asociaciones (si están definidas)
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
+// Añadir sequelize y Sequelize al objeto db
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
