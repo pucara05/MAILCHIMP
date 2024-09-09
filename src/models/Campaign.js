@@ -1,19 +1,14 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-class campaing extends Model {}
+class Campaing extends Model {}
 
-campaing.init(
+Campaing.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    campaingId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
     },
     listId: {
       type: DataTypes.STRING,
@@ -43,10 +38,9 @@ campaing.init(
   {
     sequelize,
     modelName: 'Campaing',
-    tableName: 'campaings',
+    tableName: 'campaings', // Cambia a minúsculas
     timestamps: true,
   }
 );
 
-
-export default campaing;
+export default Campaing;

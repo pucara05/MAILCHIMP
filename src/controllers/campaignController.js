@@ -111,22 +111,21 @@ export const createCampaignWithTemplate = async (req, res) => {
       },
     });
 
-    const campaignId = campaignResponse.data.id;
+    
 //guardar campaña en la base de datos 
 const NewCampaing = await campaing.create({
-  campaingId: campaingId,
-  listId: listId,
+  listId: list_id,
   subject,
   fromName: from_name,
   replyTo: reply_to,
-  templateId: parseInt(templateId, 10),
+  templateId: parseInt(template_id, 10),
   status: 'create',
 });
 
 
     res
       .status(201)
-      .json({ message: "Campaign created with template", campaignId, dbEntry: NewCampaing });
+      .json({ message: "Campaign created with template",  dbEntry: NewCampaing });
   } catch (error) {
     console.error(
       "Error creating campaign:",
